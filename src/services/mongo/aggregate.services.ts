@@ -1,4 +1,4 @@
-import ProductModel from "../../mongo/schema/product.schema";
+import ProductModel from "../../database/schema/product.schema";
 import { openAiClient } from "../openai";
 
 export const aggregateResult = async (query: string) => {

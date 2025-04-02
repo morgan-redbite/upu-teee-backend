@@ -1,10 +1,9 @@
 import { Router } from "express";
-import { createOrUpdateProductInformation, getDPDByDID } from "../services/mongo";
+import { createOrUpdateProductInformation, getDPDByDID } from "../services/mongo/query.services";
 import { fromTextToJsonAgent } from "../services/translate";
-import ProductModel from "../mongo/schema/product.schema";
-import ProductDescriptionrModel from "../mongo/schema/productDescription.schema";
-import { aggregateResult, queryChatbotMongoose } from "../services/mongollm";
-
+import { aggregateResult, queryChatbotMongoose } from "../services/mongo/aggregate.services";
+import ProductDescriptionrModel from "../database/schema/productDescription.schema";
+import ProductModel from "../database/schema/product.schema";
 const router = Router();
 
 // POST /upsert to create or update a product information.

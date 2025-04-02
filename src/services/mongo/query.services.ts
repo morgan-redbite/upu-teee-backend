@@ -1,4 +1,4 @@
-import ProductModel, { IProduct } from "../../mongo/schema/product.schema";
+import ProductModel, { IProduct } from "../../database/schema/product.schema";
 
 export const createOrUpdateProductInformation = async (data: IProduct) => {
   try {

@@ -1,6 +1,6 @@
 import e, { Router } from "express";
 import { generateDIDDocumet, uploadDIDDocument } from "../services/web3/uDID";
-import DIDIndexerModel from "../mongo/schema/did-indexer.schema";
+import DIDIndexerModel from "../database/schema/did-indexer.schema";
 
 const router = Router();
 

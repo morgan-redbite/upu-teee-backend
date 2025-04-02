@@ -1,9 +1,11 @@
 import express from 'express';
 import cors from 'cors';
-import Web3Router from './router/web3.router';
+import Web3Router from './src/router/web3.router';
+import ProductRouter from './src/router/product.router';
+import ManufacturerRouter from './src/router/manufacturer.router';
 import dotenv from 'dotenv';
-import mongooseConnection from './mongo';
-import ProductRouter from './router/product.router';
+import mongooseConnection from './src/database';
+
 dotenv.config();
 
 const port = 8000;
@@ -21,6 +23,7 @@ app.get('/', (req, res) => {
 
 app.use('/web3', Web3Router);
 app.use('/product', ProductRouter);
+app.use('/manufacturer', ManufacturerRouter);
 
 app.listen(port, async () => {
   try {

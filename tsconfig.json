@@ -15,9 +15,11 @@
     "useDefineForClassFields": false,
     "noFallthroughCasesInSwitch": true,
     "noImplicitAny": false,
+    "typeRoots": ["./node_modules/@types", "./types"]
   },
   "include": [
+    "server.ts",
     "src/**/*.ts",
-    "src/types/**/*.ts"
+    "types",
   ]
 }

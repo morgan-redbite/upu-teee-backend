@@ -1,4 +1,4 @@
-import { IProduct, IProductTypes } from './../../mongo/schema/product.schema';
+import { IProduct, IProductTypes } from '../../database/schema/product.schema';
 const RV_REFRIGERATOR = {
   "brand": {
       "name": "RV Electronics Co."
