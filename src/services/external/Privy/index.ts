@@ -26,7 +26,7 @@ export const authenticatePrivy = async (
   const authorizationHeader = req.headers.authorization;
 
   if (!authorizationHeader) {
-    res.status(401).json({ error: 'Unauthorized: Missing Authorization header' });
+    return res.status(401).json({ error: 'Unauthorized: Missing Authorization header' });
   }
 
   const token = authorizationHeader // Assuming "Bearer <token>"
@@ -38,12 +38,12 @@ export const authenticatePrivy = async (
     req.privyUser = decoded
 
     if (!req.privyUser) {
-      res.status(401).json({ error: 'Unauthorized: Invalid token' });
+      return res.status(401).json({ error: 'Unauthorized: Invalid token' });
     }
     next(); // Proceed to the next middleware or route handler
   } catch (error) {
     console.error('Privy authentication failed:', error);
-    res.status(401).json({ error: 'Unauthorized: Invalid token' });
+    return res.status(401).json({ error: 'Unauthorized: Invalid token' });
   }
 };
 
