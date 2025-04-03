@@ -1,6 +1,6 @@
 import mongoose, { Document, Schema } from 'mongoose';
 
-interface IManufacturerProfile {
+export interface IManufacturerProfile extends Document {
   manufacturerId: string;
   companyName: string;
   email: string;
@@ -46,6 +46,8 @@ const ManufacturerProfileSchema = new Schema({
     required: false,
     default: null
   },
+}, {
+  timestamps: true,
 });
 
 const ManufacturerProfileModel = mongoose.model<IManufacturerProfile>('ManufacturerProfile', ManufacturerProfileSchema);
