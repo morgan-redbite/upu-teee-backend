@@ -2,7 +2,7 @@ import { Router } from "express";
 import { authenticatePrivy } from "../services/external/Privy";
 import { PrivyAuthPayload } from "../../types/express";
 import { registerOrGetManufacturer, updateManufacturerProfile } from "../services/manufacturer/manufacturer-profile.service";
-import { addManufacturerProduct, getManufacturerProducts } from "../services/manufacturer/manufacturer-product.service";
+import { addManufacturerProduct, getFullManufacturerProduct, getManufacturerProducts } from "../services/manufacturer/manufacturer-product.service";
 import { addManufacturerProductImages, getManufacturerProductImages } from "../services/manufacturer/manufacturer-product-images.service";
 import { addManufacturerProductSupportingDocs, getManufacturerProductSupportingDocs } from "../services/manufacturer/manufacturer-product-supporting-docs.service";
 
@@ -230,5 +230,29 @@ ManufacturerRouter.post("/set-product-supporting-documents", authenticatePrivy, 
     });
   }
 });
+
+ManufacturerRouter.get("/get-product", authenticatePrivy, async (req, res) => {
+  try {
+    const manufacturerId = req.privyUser?.sub;
+    if (!manufacturerId) {
+      throw 'Unauthorized';
+    }
+    const productId = req.query.productId;
+    if (!productId) {
+      throw 'Product ID is required';
+    };
+
+    const result = await getFullManufacturerProduct(productId as string);
+    res.status(200).json({
+      message: "Get Product By Id",
+      result: result,
+    });
+
+  } catch (error) {
+    res.status(400).json({
+      message: error
+    });
+  }
+})
 
 export default ManufacturerRouter;

@@ -5,6 +5,7 @@ import ProductRouter from './src/router/product.router';
 import ManufacturerRouter from './src/router/manufacturer.router';
 import dotenv from 'dotenv';
 import mongooseConnection from './src/database';
+import ProductLookupRouter from './src/router/product-lookup.router';
 
 dotenv.config();
 
@@ -24,6 +25,7 @@ app.get('/', (req, res) => {
 app.use('/web3', Web3Router);
 app.use('/product', ProductRouter);
 app.use('/manufacturer', ManufacturerRouter);
+app.use('/product-lookup', ProductLookupRouter);
 
 app.listen(port, async () => {
   try {

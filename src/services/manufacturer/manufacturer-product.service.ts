@@ -1,5 +1,7 @@
 import ManufacturerProductModel, { ManufacturerProduct } from "../../database/manufacturerSchema/manufacturerProduct.schema";
 import * as uuid from 'uuid';
+import ManufacturerProductImagesModel from "../../database/manufacturerSchema/manufacturerProductImages.schema";
+import ManufacturerProductSupportingDocsModel from "../../database/manufacturerSchema/manufacturerProductSupportingDocs.schema";
 
 export const getManufacturerProducts = async (manufacturerId: string) => {
     try {
@@ -71,3 +73,74 @@ export const addOrUpdateManufacturerProduct = async (payload: ManufacturerProduc
         throw 'Error in [addManufacturerProduct]' + error;
     }
 };
+
+export const getFullManufacturerProduct = async (productId: string) => {
+    try {
+        const productInformation = await ManufacturerProductModel.findOne({
+            productId: productId,
+        });
+
+        const productImages = await ManufacturerProductImagesModel.findOne({
+            productId: productId,
+        });
+
+        const productSupportingDocs = await ManufacturerProductSupportingDocsModel.findOne({
+            productId: productId,
+        });
+
+        if (!productInformation) {
+            throw 'Product not found';
+        }
+
+        const result = {
+            productInformation: productInformation,
+            productImages: productImages?.images,
+            supportingDocs: productSupportingDocs?.supportingDocs,
+        };
+
+        return result;
+    } catch (error) {
+        throw 'Error in [getFullManufacturerProduct]: ' + error;
+    }
+}
+
+export const getFullManufacturerProductByAggregateSearchLike = async (anyIdString: string) => {
+    try {
+        const result = await ManufacturerProductModel.aggregate(
+            [
+                {
+                    $match: {
+                        $or: [
+                            { productId: anyIdString },
+                            { productCode: anyIdString },
+                        ],
+                    },
+                },
+                {
+                    $lookup: {
+                        from: 'manufacturerproductimages',
+                        localField: 'productId',
+                        foreignField: 'productId',
+                        as: 'productImages',
+                    },
+                },
+                {
+                    $lookup: {
+                        from: 'manufacturerproductsupportingdocs',
+                        localField: 'productId',
+                        foreignField: 'productId',
+                        as: 'supportingDocs',
+                    },
+                },
+            ]
+        );
+        if (result.length === 0) {
+            throw 'Product not found';
+        }
+        const productInformation = result[0];
+        return productInformation;
+
+    } catch (error) {
+        throw 'Error in [getFullManufacturerProductByAggregateSearchLike]: ' + error;
+    }
+}
