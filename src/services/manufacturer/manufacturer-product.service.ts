@@ -2,6 +2,7 @@ import ManufacturerProductModel, { ManufacturerProduct } from "../../database/ma
 import * as uuid from 'uuid';
 import ManufacturerProductImagesModel from "../../database/manufacturerSchema/manufacturerProductImages.schema";
 import ManufacturerProductSupportingDocsModel from "../../database/manufacturerSchema/manufacturerProductSupportingDocs.schema";
+import ManufacturerProfileModel, { IManufacturerProfile } from "../../database/manufacturerSchema/manufacturerProfile.schema";
 
 export const getManufacturerProducts = async (manufacturerId: string) => {
     try {
@@ -132,15 +133,50 @@ export const getFullManufacturerProductByAggregateSearchLike = async (anyIdStrin
                         as: 'supportingDocs',
                     },
                 },
+                {
+                    $project: {
+                        _id: 0,
+                        createdAt: 0,
+                        updatedAt: 0,
+                        __v: 0,
+                        'productImages._id': 0,
+                        'productImages.createdAt': 0,
+                        'productImages.updatedAt': 0,
+                        'productImages.__v': 0,
+                        'supportingDocs._id': 0,
+                        'supportingDocs.createdAt': 0,
+                        'supportingDocs.updatedAt': 0,
+                        'supportingDocs.__v': 0,
+                    },
+                },
             ]
-        );
+        )
+
+        const mannufacturerProfile = await ManufacturerProfileModel.findOne({
+            manufacturerId: result[0].manufacturerId,
+        }, { _id: 0, createdAt: 0, updatedAt: 0, __v: 0, email: 0, });
+
         if (result.length === 0) {
             throw 'Product not found';
         }
         const productInformation = result[0];
-        return productInformation;
+
+        const { productImages, supportingDocs, ...rest } = productInformation;
+        return {
+            productInformation: rest,
+            productImages: productImages[0].images,
+            supportingDocs: supportingDocs[0]?.supportingDocuments,
+            mannufacturerProfile: mannufacturerProfile,
+        }
 
     } catch (error) {
         throw 'Error in [getFullManufacturerProductByAggregateSearchLike]: ' + error;
     }
+}
+
+export interface ManufacturerProductWithImagesAndDocs {
+    productInformation: ManufacturerProduct;
+    productImages: string[];
+    supportingDocs: string[];
+    mannufacturerProfile: IManufacturerProfile;
 }
