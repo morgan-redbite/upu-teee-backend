@@ -105,7 +105,8 @@ export const getFullManufacturerProduct = async (productId: string) => {
     }
 }
 
-export const getFullManufacturerProductByAggregateSearchLike = async (anyIdString: string) => {
+export const getFullManufacturerProductByAggregateSearchLike = async (anyIdString: string): 
+Promise<ManufacturerProductWithImagesAndDocs> => {
     try {
         const result = await ManufacturerProductModel.aggregate(
             [
@@ -162,10 +163,13 @@ export const getFullManufacturerProductByAggregateSearchLike = async (anyIdStrin
         const productInformation = result[0];
 
         const { productImages, supportingDocs, ...rest } = productInformation;
+
+        const exludeSupportingDocsIds = supportingDocs[0].supportingDocs.map((doc: any) => { delete doc._id; return doc; });
+        
         return {
             productInformation: rest,
             productImages: productImages[0].images,
-            supportingDocs: supportingDocs[0]?.supportingDocuments,
+            supportingDocs: exludeSupportingDocsIds,
             mannufacturerProfile: mannufacturerProfile,
         }
 
@@ -178,5 +182,5 @@ export interface ManufacturerProductWithImagesAndDocs {
     productInformation: ManufacturerProduct;
     productImages: string[];
     supportingDocs: string[];
-    mannufacturerProfile: IManufacturerProfile;
+    mannufacturerProfile: any;
 }
