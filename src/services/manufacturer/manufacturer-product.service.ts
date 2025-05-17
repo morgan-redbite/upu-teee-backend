@@ -16,6 +16,19 @@ export const getManufacturerProducts = async (manufacturerId: string) => {
     }
 }
 
+export const getManufacturerProductbyId = async (manufacturerId: string, productId: string) => {
+    try {
+        const result = await ManufacturerProductModel.findOne({
+            manufacturerId: manufacturerId,
+            productId: productId,
+        });
+
+        return result;
+    } catch (error) {
+        throw 'Error in [getManufacturerProducts]: ' + error;
+    }
+}
+
 export const addManufacturerProduct = async (payload: ManufacturerProduct) => {
     try {
         let result;

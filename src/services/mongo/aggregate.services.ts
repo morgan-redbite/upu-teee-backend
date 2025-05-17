@@ -47,7 +47,8 @@ export const queryChatbotMongoose = async (query: string) => {
 
 const userPrompt = `
 You are a query result-to-text agent that converts JSON query results into plain text. 
-The user's question is "{question}". Based on the following query result: {queryResult}, extract and describe the relevant information in a single paragraph with no markdown formatting, no newline characters, and no escape sequences (for example, do not output " with a backslash). 
+The user's question is "{question}".
+Based on the following query result: {queryResult}, extract and describe the relevant information in a single paragraph with no markdown formatting, no newline characters, and no escape sequences (for example, do not output " with a backslash). 
 Your answer should be descriptive, polite, and helpful. If you need more details, ask the user for clarification.
 `
 
