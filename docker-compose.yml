@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    container_name: express_api_app
+    ports:
+      - "8000:8000"
+    environment:
+      # Set NODE_ENV and PORT
+      - NODE_ENV=production
+      - PORT=8000
+      # Provide your MongoDB Atlas connection string
+      - MONGODB_URI=${MONGODB_URI}
+      # Any additional environment variables
+      - API_KEY=${API_KEY}
+    networks:
+      - backend
+
+networks:
+  backend:
+    driver: bridge
