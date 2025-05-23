@@ -2,7 +2,7 @@ import { Router } from "express";
 import { authenticatePrivy } from "../services/external/Privy";
 import { PrivyAuthPayload } from "../../types/express";
 import { registerOrGetManufacturer, updateManufacturerProfile } from "../services/manufacturer/manufacturer-profile.service";
-import { addManufacturerProduct, getFullManufacturerProduct, getManufacturerProductbyId, getManufacturerProducts } from "../services/manufacturer/manufacturer-product.service";
+import { addManufacturerProduct, getFullManufacturerProduct, getManufacturerProductbyId, getManufacturerProducts, getUPUProducts } from "../services/manufacturer/manufacturer-product.service";
 import { addManufacturerProductImages, getManufacturerProductImages } from "../services/manufacturer/manufacturer-product-images.service";
 import { addManufacturerProductSupportingDocs, getManufacturerProductSupportingDocs } from "../services/manufacturer/manufacturer-product-supporting-docs.service";
 
@@ -276,6 +276,21 @@ ManufacturerRouter.get("/get-product", authenticatePrivy, async (req, res) => {
       message: error
     });
   }
-})
+});
+
+ManufacturerRouter.get('/upu-products', async (req, res) => {
+  try {
+    const result = await getUPUProducts();
+    res.status(200).json({
+      message: "Get UPU Products",
+      result: result,
+    });
+    
+  } catch (error) {
+    res.status(400).json({
+      message: error
+    });
+  }
+});
 
 export default ManufacturerRouter;

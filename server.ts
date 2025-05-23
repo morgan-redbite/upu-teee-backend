@@ -7,6 +7,8 @@ import dotenv from 'dotenv';
 import mongooseConnection from './src/database';
 import ProductLookupRouter from './src/router/product-lookup.router';
 import ProductAgentRouter from './src/router/product-agent.router';
+import APIManagement from './src/router/api-management.router';
+import UPUCircularityRouter from './src/router/upu-circulartiy.router';
 
 dotenv.config();
 
@@ -28,6 +30,8 @@ app.use('/product', ProductRouter);
 app.use('/manufacturer', ManufacturerRouter);
 app.use('/product-lookup', ProductLookupRouter);
 app.use('/product-agent', ProductAgentRouter);
+app.use('/api-management', APIManagement);
+app.use('/api/v1/upu', UPUCircularityRouter);
 
 app.listen(port, async () => {
   try {

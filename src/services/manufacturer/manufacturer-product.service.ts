@@ -197,3 +197,22 @@ export interface ManufacturerProductWithImagesAndDocs {
     supportingDocs: string[];
     mannufacturerProfile: any;
 }
+
+export const getUPUProducts = async () => {
+    try {
+        const result = await ManufacturerProductModel.find().lean();
+        const productImages = await ManufacturerProductImagesModel.find().lean();
+
+        const mapProductWithFirstImage = result.map((product) => {
+            const image = productImages.find((image) => image.productId === product.productId);
+            return {
+                ...product,
+                image: image ? image.images[0] : null,
+            };
+        });
+
+        return mapProductWithFirstImage;
+    } catch (error) {
+        throw 'Error in [getUPUProducts]: ' + error;
+    }
+}
